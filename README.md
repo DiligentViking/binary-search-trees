@@ -1,7 +1,7 @@
-<h1 align="center"> 📜 Efficientus 📜 <h1>
+<h1 align="center"> Binary Search Trees </h1>
 
-<h3 align="center">“<i>Invenire viam efficientissimam</i> -- Find the most efficient way”</h3>
+A TOP practice project to understand efficiently ordered data. Note that the algorithm to build the tree uses recursion 🔁 :D
 
-___
+![](./src/assets/images/optimal-binary-search-tree-from-sorted-array.gif)
 
-A TOP to-do list project.  I hope you find it an innovative and intuitive app to help you live/love your life.
+Pure efficiency!
