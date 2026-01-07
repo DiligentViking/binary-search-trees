@@ -152,14 +152,15 @@ export function Tree(inputArr) {
       callback(node);
     },
 
-    height(value) {
-      const node = this.find(value);
+    height(value, node) {
+      if (!value && !node) return null;
+      if (!node) node = this.find(value);
       if (!node) return null;
       
       let deepestDepth = 0;
       this.inOrderForEach((node, depth) => {
         deepestDepth = (depth > deepestDepth) ? depth : deepestDepth;
-      }, node)
+      }, node);
 
       return deepestDepth;
     },
@@ -171,13 +172,33 @@ export function Tree(inputArr) {
           returnVal = depth;
         }
       });
+      return returnVal;  // consider using a flag so we are not always in worst-case time
+    },
+
+    isBalanced() {
+      let returnVal = true;
+      this.preOrderForEach((node, depth) => {
+        const leftHeight = this.height(null, node.left);
+        const rightHeight = this.height(null, node.right);
+        if (Math.abs(leftHeight - rightHeight) > 1) {
+          returnVal = false;
+        }
+      });
       return returnVal;
     },
+
+    rebalance() {
+      const arrToInput = [];
+      this.inOrderForEach((node) => {
+        arrToInput.push(node.data);
+      });
+      this.root = buildTree(arrToInput);
+    }
   };
 }
 
 function buildTree(inputArr) {
-  inputArr.sort();
+  inputArr.sort((a, b) => a - b);
   const uniques = [];
   let prev;
   for (const num of inputArr) {
@@ -187,6 +208,7 @@ function buildTree(inputArr) {
     };
   }
   inputArr = uniques;
+  console.log({inputArr});
 
   const rootNode = buildBalancedBST(inputArr);
 
