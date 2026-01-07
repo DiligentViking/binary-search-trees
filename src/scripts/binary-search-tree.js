@@ -101,12 +101,12 @@ export function Tree(inputArr) {
       }
     },
 
-    levelOrderForEach(callback) {
+    levelOrderForEach(callback, node = this.root) {
       if (typeof callback !== 'function') {
         throw new Error('Dude, I expected a callback function');
       }
 
-      const queue = [this.root];
+      const queue = [node];
       let i = 0;
       while (i !== queue.length) {
         callback(queue[i]);
@@ -116,16 +116,16 @@ export function Tree(inputArr) {
       }
     },
 
-    inOrderForEach(callback, node = this.root) {
+    inOrderForEach(callback, node = this.root, depth = 0) {
       if (typeof callback !== 'function') {
         throw new Error('Dude, I expected a callback function');
       }
 
       if (node === null) return;
 
-      this.inOrderForEach(callback, node.left);
-      callback(node);
-      this.inOrderForEach(callback, node.right);
+      this.inOrderForEach(callback, node.left, depth + 1);
+      callback(node, depth);
+      this.inOrderForEach(callback, node.right, depth + 1);
     },
 
     preOrderForEach(callback, node = this.root) {
@@ -152,6 +152,27 @@ export function Tree(inputArr) {
       callback(node);
     },
 
+    height(value) {
+      const node = this.find(value);
+      if (!node) return null;
+      
+      let deepestDepth = 0;
+      this.inOrderForEach((node, depth) => {
+        deepestDepth = (depth > deepestDepth) ? depth : deepestDepth;
+      }, node)
+
+      return deepestDepth;
+    },
+
+    depth(value) {
+      let returnVal;
+      this.inOrderForEach((node, depth) => {
+        if (node.data === value) {
+          returnVal = depth;
+        }
+      });
+      return returnVal;
+    },
   };
 }
 

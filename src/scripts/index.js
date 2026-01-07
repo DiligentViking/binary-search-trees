@@ -7,6 +7,10 @@ console.log(BST);
 // BST.insert(7.5);
 // BST.delete(5);
 
-BST.postOrderForEach((node) => {console.log(node)});
+// BST.inOrderForEach((node, height) => {console.log(node, height)});
+
+console.log(
+  BST.depth(6)
+);
 
 BST.prettyPrint();
