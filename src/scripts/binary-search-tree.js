@@ -1,4 +1,4 @@
-function Node(data, left, right) {
+function Node(data, left = null, right = null) {
   return {
     data,
     left,
@@ -22,6 +22,84 @@ export function Tree(inputArr) {
         this.prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
       }
     },
+
+    insert(value, curr = this.root) {
+      if (curr === null) return Node(value);
+      
+      if (value < curr.data) {
+        curr.left = this.insert(value, curr.left);
+      } else if (value > curr.data) {
+        curr.right = this.insert(value, curr.right);
+      } else {
+        throw new Error('Duplicate values are not allowed, sry');
+      }
+
+      return curr;
+    },
+
+    find(value) {
+      let curr = this.root;
+
+      while (curr !== null) {
+        if (value < curr.data) {
+          curr = curr.left;
+        } else if (value > curr.data) {
+          curr = curr.right;
+        } else {
+          return curr;
+        }
+      }
+
+      return undefined;
+    },
+
+    delete(value) {
+      const node = this.find(value);
+
+      let parent = null;
+      let curr = this.root;
+      let FIREBREAK = 0;
+      if (this.root.data !== value) {
+        while (curr !== null) {
+          if (curr.left?.data === value || curr.right?.data === value) {
+            parent = curr;
+            break;
+          }
+          if (value < curr.data) {
+            curr = curr.left;
+          } else if (value > curr.data) {
+            curr = curr.right;
+          }
+          FIREBREAK++;
+          if (FIREBREAK > 1000) {
+            console.log('FIREBREAK');
+            return;
+          }
+        }
+      }
+
+      if (node.left && node.right) {
+        let successor = node.right;
+        while (successor.left !== null) {
+          successor = successor.left;
+        }
+        this.delete(successor.data);
+        node.data = successor.data;
+      } else if (node.left || node.right) {
+        const nodeChild = node.left || node.right;
+        if (parent.left?.data === node.data) {
+          parent.left = nodeChild;
+        } else {
+          parent.right = nodeChild;
+        }
+      } else {
+        if (parent.left?.data === node.data) {
+          parent.left = null;
+        } else {
+          parent.right = null;
+        }
+      }
+    }
 
   };
 }
