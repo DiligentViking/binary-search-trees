@@ -58,7 +58,6 @@ export function Tree(inputArr) {
 
       let parent = null;
       let curr = this.root;
-      let FIREBREAK = 0;
       if (this.root.data !== value) {
         while (curr !== null) {
           if (curr.left?.data === value || curr.right?.data === value) {
@@ -69,11 +68,6 @@ export function Tree(inputArr) {
             curr = curr.left;
           } else if (value > curr.data) {
             curr = curr.right;
-          }
-          FIREBREAK++;
-          if (FIREBREAK > 1000) {
-            console.log('FIREBREAK');
-            return;
           }
         }
       }
@@ -177,7 +171,7 @@ export function Tree(inputArr) {
 
     isBalanced() {
       let returnVal = true;
-      this.preOrderForEach((node, depth) => {
+      this.preOrderForEach((node) => {
         const leftHeight = this.height(null, node.left);
         const rightHeight = this.height(null, node.right);
         if (Math.abs(leftHeight - rightHeight) > 1) {
