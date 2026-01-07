@@ -99,7 +99,58 @@ export function Tree(inputArr) {
           parent.right = null;
         }
       }
-    }
+    },
+
+    levelOrderForEach(callback) {
+      if (typeof callback !== 'function') {
+        throw new Error('Dude, I expected a callback function');
+      }
+
+      const queue = [this.root];
+      let i = 0;
+      while (i !== queue.length) {
+        callback(queue[i]);
+        if (queue[i].left) queue.push(queue[i].left);
+        if (queue[i].right) queue.push(queue[i].right);
+        i++;
+      }
+    },
+
+    inOrderForEach(callback, node = this.root) {
+      if (typeof callback !== 'function') {
+        throw new Error('Dude, I expected a callback function');
+      }
+
+      if (node === null) return;
+
+      this.inOrderForEach(callback, node.left);
+      callback(node);
+      this.inOrderForEach(callback, node.right);
+    },
+
+    preOrderForEach(callback, node = this.root) {
+      if (typeof callback !== 'function') {
+        throw new Error('Dude, I expected a callback function');
+      }
+
+      if (node === null) return;
+
+      callback(node);
+      this.preOrderForEach(callback, node.left);
+      this.preOrderForEach(callback, node.right);
+    },
+
+    postOrderForEach(callback, node = this.root) {
+      if (typeof callback !== 'function') {
+        throw new Error('Dude, I expected a callback function');
+      }
+
+      if (node === null) return;
+
+      this.postOrderForEach(callback, node.left);
+      this.postOrderForEach(callback, node.right);
+      callback(node);
+    },
 
   };
 }
