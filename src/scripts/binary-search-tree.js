@@ -145,6 +145,22 @@ export function Tree(inputArr) {
       }
     },
 
+    levelOrderForEach_R(callback, node = this.root) {
+      if (typeof callback !== 'function') {
+        throw new Error('Dude, I expected a callback function');
+      }
+
+      const queue = [node];
+      function recFunc(i = 0) {
+        if (i === queue.length) return;
+        callback(queue[i]);
+        if (queue[i].left) queue.push(queue[i].left);
+        if (queue[i].right) queue.push(queue[i].right);
+        recFunc(i + 1);
+      }
+      recFunc();
+    },
+
     inOrderForEach(callback, node = this.root, depth = 0) {
       if (typeof callback !== 'function') {
         throw new Error('Dude, I expected a callback function');
