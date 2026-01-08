@@ -99,8 +99,35 @@ export function Tree(inputArr) {
       }
     },
 
-    delete_R(value, curr = this.root) {
+    delete_R(value) {
+      function findNodeAndParent(value, curr, parent) {
+        if (curr === null) return undefined;
+        if (value < curr.data) {
+          return findNodeAndParent(value, curr.left, curr);
+        } else if (value > curr.data) {
+          return findNodeAndParent(value, curr.right, curr);
+        } else {
+          return {curr, parent};
+        }
+      }
 
+      const {curr, parent} = findNodeAndParent(value, this.root, null);
+
+      if (curr.left && curr.right) {
+        let successor = curr.right;
+        while (successor.left !== null) {
+          successor = successor.left;
+        }
+        this.delete(successor.data);
+        curr.data = successor.data;
+      } else if (curr.left || curr.right) {
+        const nodeChild = curr.left || curr.right;
+        if (parent.left?.data === curr.data) parent.left = nodeChild;
+        else parent.right = nodeChild;
+      } else {
+        if (parent.left?.data === curr.data) parent.left = null;
+        else parent.right = null;
+      }
     },
 
     levelOrderForEach(callback, node = this.root) {
