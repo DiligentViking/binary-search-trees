@@ -23,13 +23,13 @@ export function Tree(inputArr) {
       }
     },
 
-    insert(value, curr = this.root) {
+    insert_R(value, curr = this.root) {
       if (curr === null) return Node(value);
       
       if (value < curr.data) {
-        curr.left = this.insert(value, curr.left);
+        curr.left = this.insert_R(value, curr.left);
       } else if (value > curr.data) {
-        curr.right = this.insert(value, curr.right);
+        curr.right = this.insert_R(value, curr.right);
       } else {
         throw new Error('Duplicate values are not allowed, sry');
       }
@@ -53,46 +53,54 @@ export function Tree(inputArr) {
       return undefined;
     },
 
-    delete(value) {
-      const node = this.find(value);
+    find_R(value, curr = this.root) {
+      if (curr === null) {
+        return undefined;
+      }
 
+      if (value < curr.data) {
+        return this.find_R(value, curr.left);
+      } else if (value > curr.data) {
+        return this.find_R(value, curr.right);
+      } else {
+        return curr;
+      }
+    },
+
+    delete(value) {
       let parent = null;
       let curr = this.root;
-      if (this.root.data !== value) {
-        while (curr !== null) {
-          if (curr.left?.data === value || curr.right?.data === value) {
-            parent = curr;
-            break;
-          }
-          if (value < curr.data) {
-            curr = curr.left;
-          } else if (value > curr.data) {
-            curr = curr.right;
-          }
+      while (curr !== null) {
+        if (value < curr.data) {
+          parent = curr;
+          curr = curr.left;
+        } else if (value > curr.data) {
+          parent = curr;
+          curr = curr.right;
+        } else {
+          break;
         }
       }
 
-      if (node.left && node.right) {
-        let successor = node.right;
+      if (curr.left && curr.right) {
+        let successor = curr.right;
         while (successor.left !== null) {
           successor = successor.left;
         }
         this.delete(successor.data);
-        node.data = successor.data;
-      } else if (node.left || node.right) {
-        const nodeChild = node.left || node.right;
-        if (parent.left?.data === node.data) {
-          parent.left = nodeChild;
-        } else {
-          parent.right = nodeChild;
-        }
+        curr.data = successor.data;
+      } else if (curr.left || curr.right) {
+        const nodeChild = curr.left || curr.right;
+        if (parent.left?.data === curr.data) parent.left = nodeChild;
+        else parent.right = nodeChild;
       } else {
-        if (parent.left?.data === node.data) {
-          parent.left = null;
-        } else {
-          parent.right = null;
-        }
+        if (parent.left?.data === curr.data) parent.left = null;
+        else parent.right = null;
       }
+    },
+
+    delete_R(value, curr = this.root) {
+
     },
 
     levelOrderForEach(callback, node = this.root) {
