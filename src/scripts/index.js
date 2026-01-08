@@ -2,7 +2,7 @@ import { Tree } from './binary-search-tree.js';
 
 const BST = Tree([7, 3, 1, 4, 1, 6, 5, 8, 9]);
 
-BST.levelOrderForEach_R((node) => console.log(node));
+
 
 BST.prettyPrint();
 
@@ -17,11 +17,11 @@ const BSTree = Tree(arrOfRandNums);
 
 BSTree.levelOrderForEach((node) => {console.log(node)});
 console.log('');
-BSTree.inOrderForEach((node) => {console.log(node)});
+BSTree.inOrderForEach_R((node) => {console.log(node)});
 console.log('');
-BSTree.preOrderForEach((node) => {console.log(node)});
+BSTree.preOrderForEach_R((node) => {console.log(node)});
 console.log('');
-BSTree.postOrderForEach((node) => {console.log(node)});
+BSTree.postOrderForEach_R((node) => {console.log(node)});
 
 console.log(BSTree.isBalanced());
 for (let i = 0; i < 10; i++) {
@@ -33,11 +33,11 @@ console.log(BSTree.isBalanced());
 
 BSTree.levelOrderForEach((node) => {console.log(node)});
 console.log('');
-BSTree.inOrderForEach((node) => {console.log(node)});
+BSTree.inOrderForEach_R((node) => {console.log(node)});
 console.log('');
-BSTree.preOrderForEach((node) => {console.log(node)});
+BSTree.preOrderForEach_R((node) => {console.log(node)});
 console.log('');
-BSTree.postOrderForEach((node) => {console.log(node)});
+BSTree.postOrderForEach_R((node) => {console.log(node)});
 
 BSTree.prettyPrint();
 `

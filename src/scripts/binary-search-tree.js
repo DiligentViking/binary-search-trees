@@ -23,6 +23,28 @@ export function Tree(inputArr) {
       }
     },
 
+    insert(value) {
+      let parent = null;
+      let curr = this.root;
+      while (curr !== null) {
+        if (value < curr.data) {
+          parent = curr;
+          curr = curr.left;
+        } else if (value > curr.data) {
+          parent = curr;
+          curr = curr.right;
+        } else {
+          throw new Error('Duplicate values are not allowed, sry');
+        }
+      }
+      
+      if (value < parent.data) {
+        parent.left = Node(value);
+      } else {
+        parent.right = Node(value);
+      }
+    },
+
     insert_R(value, curr = this.root) {
       if (curr === null) return Node(value);
       
@@ -161,19 +183,19 @@ export function Tree(inputArr) {
       recFunc();
     },
 
-    inOrderForEach(callback, node = this.root, depth = 0) {
+    inOrderForEach_R(callback, node = this.root, depth = 0) {
       if (typeof callback !== 'function') {
         throw new Error('Dude, I expected a callback function');
       }
 
       if (node === null) return;
 
-      this.inOrderForEach(callback, node.left, depth + 1);
+      this.inOrderForEach_R(callback, node.left, depth + 1);
       callback(node, depth);
-      this.inOrderForEach(callback, node.right, depth + 1);
+      this.inOrderForEach_R(callback, node.right, depth + 1);
     },
 
-    preOrderForEach(callback, node = this.root) {
+    preOrderForEach_R(callback, node = this.root) {
       if (typeof callback !== 'function') {
         throw new Error('Dude, I expected a callback function');
       }
@@ -181,19 +203,19 @@ export function Tree(inputArr) {
       if (node === null) return;
 
       callback(node);
-      this.preOrderForEach(callback, node.left);
-      this.preOrderForEach(callback, node.right);
+      this.preOrderForEach_R(callback, node.left);
+      this.preOrderForEach_R(callback, node.right);
     },
 
-    postOrderForEach(callback, node = this.root) {
+    postOrderForEach_R(callback, node = this.root) {
       if (typeof callback !== 'function') {
         throw new Error('Dude, I expected a callback function');
       }
 
       if (node === null) return;
 
-      this.postOrderForEach(callback, node.left);
-      this.postOrderForEach(callback, node.right);
+      this.postOrderForEach_R(callback, node.left);
+      this.postOrderForEach_R(callback, node.right);
       callback(node);
     },
 
@@ -203,7 +225,7 @@ export function Tree(inputArr) {
       if (!node) return null;
       
       let deepestDepth = 0;
-      this.inOrderForEach((node, depth) => {
+      this.inOrderForEach_R((node, depth) => {
         deepestDepth = (depth > deepestDepth) ? depth : deepestDepth;
       }, node);
 
@@ -212,7 +234,7 @@ export function Tree(inputArr) {
 
     depth(value) {
       let returnVal;
-      this.inOrderForEach((node, depth) => {
+      this.inOrderForEach_R((node, depth) => {
         if (node.data === value) {
           returnVal = depth;
         }
@@ -222,7 +244,7 @@ export function Tree(inputArr) {
 
     isBalanced() {
       let returnVal = true;
-      this.preOrderForEach((node) => {
+      this.preOrderForEach_R((node) => {
         const leftHeight = this.height(null, node.left);
         const rightHeight = this.height(null, node.right);
         if (Math.abs(leftHeight - rightHeight) > 1) {
@@ -234,7 +256,7 @@ export function Tree(inputArr) {
 
     rebalance() {
       const arrToInput = [];
-      this.inOrderForEach((node) => {
+      this.inOrderForEach_R((node) => {
         arrToInput.push(node.data);
       });
       this.root = buildTree(arrToInput);
@@ -253,7 +275,6 @@ function buildTree(inputArr) {
     };
   }
   inputArr = uniques;
-  console.log({inputArr});
 
   const rootNode = buildBalancedBST(inputArr);
 
