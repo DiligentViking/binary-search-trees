@@ -2,7 +2,7 @@ import { Tree } from './binary-search-tree.js';
 
 const BST = Tree([7, 3, 1, 4, 1, 6, 5, 8, 9]);
 
-BST.postOrderForEach((node) => {console.log(node.data)});
+BST.inOrderForEach((node, depth) => {console.log(node.data, depth)});
 
 BST.prettyPrint();
 

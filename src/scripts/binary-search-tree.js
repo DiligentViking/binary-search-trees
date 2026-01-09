@@ -183,6 +183,36 @@ export function Tree(inputArr) {
       recFunc();
     },
 
+    inOrderForEach(callback) {
+      if (typeof callback !== 'function') {
+        throw new Error('Dude, I expected a callback function');
+      }
+
+      const map = {[this.root.data]: 1};  // Mark each node visited.
+      const stack = [this.root];
+      let curr = this.root;
+      loop1:
+      while (stack.length) {
+        while (curr.left !== null && !map[curr.left.data]) {
+          curr = curr.left;
+          map[curr.data] = 1;
+          stack.push(curr);
+        }
+        if (map[curr.data] !== 2) {
+          callback(curr, stack.length-1);
+          map[curr.data] = map[curr.data] + 1;
+        }
+        while (curr.right !== null && !map[curr.right.data]) {
+          curr = curr.right;
+          map[curr.data] = 1;
+          stack.push(curr);
+          continue loop1;
+        }
+        stack.pop();
+        curr = stack[stack.length - 1];
+      }
+    },
+
     inOrderForEach_R(callback, node = this.root, depth = 0) {
       if (typeof callback !== 'function') {
         throw new Error('Dude, I expected a callback function');
@@ -193,6 +223,37 @@ export function Tree(inputArr) {
       this.inOrderForEach_R(callback, node.left, depth + 1);
       callback(node, depth);
       this.inOrderForEach_R(callback, node.right, depth + 1);
+    },
+
+    preOrderForEach(callback) {
+      if (typeof callback !== 'function') {
+        throw new Error('Dude, I expected a callback function');
+      }
+
+      const map = {[this.root.data]: 1};  // Mark each node visited.
+      const stack = [this.root];
+      let curr = this.root;
+      loop1:
+      while (stack.length) {
+        if (map[curr.data] !== 2) {
+          callback(curr);
+          map[curr.data] = map[curr.data] + 1;
+        }
+        while (curr.left !== null && !map[curr.left.data]) {
+          curr = curr.left;
+          map[curr.data] = 1;
+          stack.push(curr);
+          continue loop1;
+        }
+        while (curr.right !== null && !map[curr.right.data]) {
+          curr = curr.right;
+          map[curr.data] = 1;
+          stack.push(curr);
+          continue loop1;
+        }
+        stack.pop();
+        curr = stack[stack.length - 1];
+      }
     },
 
     preOrderForEach_R(callback, node = this.root) {
