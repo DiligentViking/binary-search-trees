@@ -207,6 +207,33 @@ export function Tree(inputArr) {
       this.preOrderForEach_R(callback, node.right);
     },
 
+    postOrderForEach(callback) {
+      if (typeof callback !== 'function') {
+        throw new Error('Dude, I expected a callback function');
+      }
+
+      const map = {[this.root.data]: 1};  // Mark each node visited.
+      const stack = [this.root];
+      let curr = this.root;
+      loop1:
+      while (stack.length) {
+        while (curr.left !== null && !map[curr.left.data]) {
+          curr = curr.left;
+          map[curr.data] = 1;
+          stack.push(curr);
+        }
+        while (curr.right !== null && !map[curr.right.data]) {
+          curr = curr.right;
+          map[curr.data] = 1;
+          stack.push(curr);
+          continue loop1;
+        }
+        callback(curr);
+        stack.pop();
+        curr = stack[stack.length - 1];
+      }
+    },
+
     postOrderForEach_R(callback, node = this.root) {
       if (typeof callback !== 'function') {
         throw new Error('Dude, I expected a callback function');
